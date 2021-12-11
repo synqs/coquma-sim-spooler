@@ -48,7 +48,7 @@ hop_schema = {
     "minItems": 3,
     "maxItems": 3,
     "items": [
-        {"type": "string", "enum": ["hop"]},
+        {"type": "string", "enum": ["fhop"]},
         {
             "type": "array",
             "maxItems": 4,
