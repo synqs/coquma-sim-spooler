@@ -10,6 +10,7 @@ click==8.0.3
 cliff==3.10.0
 cmd2==2.3.3
 docutils==0.17.1
+dropbox==11.25.0
 extras==1.0.0
 fixtures==3.0.0
 future==0.18.2
@@ -29,6 +30,7 @@ pathspec==0.9.0
 pbr==5.8.0
 platformdirs==2.4.0
 pluggy==1.0.0
+ply==3.11
 prettytable==2.4.0
 py==1.11.0
 Pygments==2.10.0
@@ -53,6 +55,7 @@ sphinxcontrib-qthelp==1.0.3
 sphinxcontrib-serializinghtml==1.1.5
 stestr==3.2.1
 stevedore==3.5.0
+stone==3.2.1
 testtools==2.5.0
 toml==0.10.2
 tomli==1.2.2
