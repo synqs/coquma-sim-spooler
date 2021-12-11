@@ -1,20 +1,15 @@
+"""
+The spooler that allows us to simulate the behavior of hopping fermions.
+"""
+
 import json
 
-# import os
-# import time
-# mport shutil
 from jsonschema import validate
+from jsonschema.exceptions import ValidationError
 from drpbx import *
-
-# from .models import Job
-
 
 import numpy as np
 from scipy.sparse.linalg import expm
-from scipy.sparse import identity
-from scipy.sparse import diags
-from scipy.sparse import coo_matrix
-from scipy.sparse import csc_matrix
 
 exper_schema = {
     "type": "object",
@@ -80,15 +75,21 @@ int_schema = {
 }
 
 
-def check_with_schema(obj, schm):
+def check_with_schema(obj: dict, schm: dict) -> bool:
+    """Check the function with a schema.
+
+    Args:
+        obj (dict): The object that is to be checked.
+        schm (dict): The json schme that we will check.
+    """
     try:
         validate(instance=obj, schema=schm)
         return "", True
-    except Exception as e:
-        return str(e), False
+    except ValidationError as exc:
+        return str(exc), False
 
 
-def check_json_dict(json_dict):
+def check_json_dict(json_dict: dict) -> bool:
     """
     Check if the json file has the appropiate syntax.
 
@@ -107,23 +108,23 @@ def check_json_dict(json_dict):
         "measure": barrier_measure_schema,
     }
     max_exps = 50
-    for e in json_dict:
+    for entry in json_dict:
         err_code = "Wrong experiment name or too many experiments"
         try:
             exp_ok = (
-                e.startswith("experiment_")
-                and e[11:].isdigit()
-                and (int(e[11:]) <= max_exps)
+                entry.startswith("experiment_")
+                and entry[11:].isdigit()
+                and (int(entry[11:]) <= max_exps)
             )
         except:
             exp_ok = False
             break
         if not exp_ok:
             break
-        err_code, exp_ok = check_with_schema(json_dict[e], exper_schema)
+        err_code, exp_ok = check_with_schema(json_dict[entry], exper_schema)
         if not exp_ok:
             break
-        ins_list = json_dict[e]["instructions"]
+        ins_list = json_dict[entry]["instructions"]
         for ins in ins_list:
             try:
                 err_code, exp_ok = check_with_schema(ins, ins_schema_dict[ins[0]])
@@ -283,7 +284,6 @@ def gen_circuit(json_dict, job_id):
                 measurements[jj, ii] = int(observed)
         shots_array = measurements.tolist()
 
-    #print("done calc")
     exp_sub_dict = create_memory_data(shots_array, exp_name, n_shots)
     return exp_sub_dict
 
@@ -292,10 +292,12 @@ def add_job(json_dict, status_msg_dict):
     """
     The function that translates the json with the instructions into some circuit and executes it.
 
-    It performs several checks for the job to see if it is properly working. If things are fine the job gets added the list of things that should be executed.
+    It performs several checks for the job to see if it is properly working. If things are fine the
+    job gets added the list of things that should be executed.
 
-    json_dict: A dictonary of all the instructions.
-    job_id: the ID of the job we are treating.
+    Args:
+        json_dict: A dictonary of all the instructions.
+        job_id: the ID of the job we are treating.
     """
     job_id = status_msg_dict["job_id"]
     extracted_username = job_id.split("-")[2]
@@ -326,7 +328,7 @@ def add_job(json_dict, status_msg_dict):
             exp_dict = {exp: json_dict[exp]}
             # Here we
             result_dict["results"].append(gen_circuit(exp_dict, job_id))
-        #print("done form")
+        # print("done form")
         result_json_dir = (
             "/Backend_files/Result/"
             + requested_backend
