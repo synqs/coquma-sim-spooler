@@ -4,7 +4,8 @@ import time
 import shutil
 from jsonschema import validate
 from drpbx import *
-#from .models import Job
+
+# from .models import Job
 
 
 import numpy as np
@@ -187,7 +188,9 @@ def check_json_dict(json_dict):
             exp_ok = (
                 e.startswith("experiment_")
                 and e[11:].isdigit()
-                and (int(e[11:]) <= max_exps)# maximal number of experiments is limited to 15! Whoever coded this. This is original sin.
+                and (
+                    int(e[11:]) <= max_exps
+                )  # maximal number of experiments is limited to 15! Whoever coded this. This is original sin.
             )
         except:
             exp_ok = False
@@ -393,6 +396,7 @@ def gen_circuit(json_dict, job_id):
 
     exp_sub_dict = create_memory_data(shots_array, exp_name, n_shots)
     return exp_sub_dict
+
 
 def add_job(json_dict, status_msg_dict):
     """
