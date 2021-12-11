@@ -66,7 +66,7 @@ int_schema = {
     "minItems": 3,
     "maxItems": 3,
     "items": [
-        {"type": "string", "enum": ["int", "phase"]},
+        {"type": "string", "enum": ["fint", "fphase"]},
         {
             "type": "array",
             "maxItems": 8,
