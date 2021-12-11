@@ -283,7 +283,6 @@ def gen_circuit(json_dict, job_id):
                 measurements[jj, ii] = int(observed)
         shots_array = measurements.tolist()
 
-    #print("done calc")
     exp_sub_dict = create_memory_data(shots_array, exp_name, n_shots)
     return exp_sub_dict
 
@@ -326,7 +325,7 @@ def add_job(json_dict, status_msg_dict):
             exp_dict = {exp: json_dict[exp]}
             # Here we
             result_dict["results"].append(gen_circuit(exp_dict, job_id))
-        #print("done form")
+
         result_json_dir = (
             "/Backend_files/Result/"
             + requested_backend
