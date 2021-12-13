@@ -51,9 +51,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv install -d
-    - name: Run pylint
-      run: |
-        pipenv run pylint spooler_files
     - name: Run black
       run: |
         pipenv run black --check .
