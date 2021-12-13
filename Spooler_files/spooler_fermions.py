@@ -284,6 +284,7 @@ def gen_circuit(json_dict, job_id):
                 measurements[jj, ii] = int(observed)
         shots_array = measurements.tolist()
 
+
     exp_sub_dict = create_memory_data(shots_array, exp_name, n_shots)
     return exp_sub_dict
 
