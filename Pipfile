@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 dropbox = "*"
-jsonschema = "*"
+jsonschema = "~=3.2"
 numpy = "*"
 requests = "*"
 scipy = "*"
