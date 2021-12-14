@@ -18,7 +18,7 @@ from scipy.sparse import csc_matrix
 
 exper_schema = {
     "type": "object",
-    "required": ["instructions", "shots", "num_wires","wire_order"],
+    "required": ["instructions", "shots", "num_wires", "wire_order"],
     "properties": {
         "instructions": {"type": "array", "items": {"type": "array"}},
         "shots": {"type": "number", "minimum": 0, "maximum": 10 ** 3},
