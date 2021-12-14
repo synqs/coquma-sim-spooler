@@ -18,13 +18,13 @@ from scipy.sparse import csc_matrix
 
 exper_schema = {
     "type": "object",
-    "required": ["instructions", "shots", "num_wires"],
+    "required": ["instructions", "shots", "num_wires","wire_order"],
     "properties": {
         "instructions": {"type": "array", "items": {"type": "array"}},
         "shots": {"type": "number", "minimum": 0, "maximum": 10 ** 3},
         "num_wires": {"type": "number", "minimum": 1, "maximum": 8},
         "seed": {"type": "number"},
-        "wire_order": {"type": "string", "enum": ["interleaved", "sequential"]},
+        "wire_order": {"type": "string", "enum": ["interleaved"]},
     },
     "additionalProperties": False,
 }
