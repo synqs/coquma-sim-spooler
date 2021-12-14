@@ -33,6 +33,33 @@ def run_json_circuit(json_dict,job_id):
 ###########################
 ###########################
 
+def test_wire_order():
+        """
+        Test that the wire_order is properly working.
+        """
+
+        # first submit the job
+        job_payload = {
+            "experiment_0": {
+                "instructions": [
+                    ["load", [7], []],
+                    ["load", [2], []],
+                    ["measure", [2], []],
+                    ["measure", [6], []],
+                    ["measure", [7], []],
+                ],
+                "num_wires": 8,
+                "shots": 4,
+                "wire_order": "sequential",
+            },
+        }
+
+        job_id = 1
+        try:
+            data = run_json_circuit(job_payload,job_id)
+        except AssertionError as ass_err:
+            print('Sucessfully triggered AssertionError',str(ass_err))
+
 def test_load_gate():
         """
         Test that the loading is properly working.
