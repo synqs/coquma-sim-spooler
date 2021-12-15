@@ -113,6 +113,7 @@ def test_hop_gate():
             ],
             "num_wires": 8,
             "shots": 4,
+            "wire_order": "interleaved",
         },
     }
 
@@ -143,6 +144,7 @@ def test_phase_gate():
             ],
             "num_wires": 8,
             "shots": 2,
+            "wire_order": "interleaved",
         },
     }
 
@@ -174,6 +176,7 @@ def test_seed():
             ],
             "num_wires": 8,
             "shots": 4,
+            "wire_order": "interleaved",
             "seed": 12345,
         },
         "experiment_1": {
@@ -188,6 +191,7 @@ def test_seed():
             ],
             "num_wires": 8,
             "shots": 4,
+            "wire_order": "interleaved",
             "seed": 12345,
         },
     }
