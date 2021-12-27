@@ -7,7 +7,7 @@ import json
 # import time
 # import shutil
 from jsonschema import validate
-from drpbx import *
+# from drpbx import *
 
 # from .models import Job
 
@@ -319,17 +319,17 @@ def add_job(json_dict, status_msg_dict):
     job_id: the ID of the job we are treating.
     """
     job_id = status_msg_dict["job_id"]
-    extracted_username = job_id.split("-")[2]
-    requested_backend = job_id.split("-")[1]
+    # extracted_username = job_id.split("-")[2]
+    # requested_backend = job_id.split("-")[1]
 
-    status_json_dir = (
-        "/Backend_files/Status/" + requested_backend + "/" + extracted_username + "/"
-    )
-    status_json_name = "status-" + job_id + ".json"
-    status_json_path = status_json_dir + status_json_name
+    # status_json_dir = (
+    #     "/Backend_files/Status/" + requested_backend + "/" + extracted_username + "/"
+    # )
+    # status_json_name = "status-" + job_id + ".json"
+    # status_json_path = status_json_dir + status_json_name
 
-    job_json_name = "job-" + job_id + ".json"
-    job_json_start_path = "/Backend_files/Running_Jobs/" + job_json_name
+    # job_json_name = "job-" + job_id + ".json"
+    # job_json_start_path = "/Backend_files/Running_Jobs/" + job_json_name
 
     result_dict = {
         "backend_name": "synqs_fermionic_tweezer_simulator",
@@ -348,34 +348,34 @@ def add_job(json_dict, status_msg_dict):
             # Here we
             result_dict["results"].append(gen_circuit(exp_dict, job_id))
 
-        result_json_dir = (
-            "/Backend_files/Result/"
-            + requested_backend
-            + "/"
-            + extracted_username
-            + "/"
-        )
-        result_json_name = "result-" + job_id + ".json"
-        result_json_path = result_json_dir + result_json_name
-        result_binary = json.dumps(result_dict).encode("utf-8")
-        upload(DUMPSTRING=result_binary, DROPBOXPATH=result_json_path)
+        # result_json_dir = (
+        #     "/Backend_files/Result/"
+        #     + requested_backend
+        #     + "/"
+        #     + extracted_username
+        #     + "/"
+        # )
+        # result_json_name = "result-" + job_id + ".json"
+        # result_json_path = result_json_dir + result_json_name
+        # result_binary = json.dumps(result_dict).encode("utf-8")
+        # upload(DUMPSTRING=result_binary, DROPBOXPATH=result_json_path)
 
         status_msg_dict[
             "detail"
         ] += "; Passed json sanity check; Compilation done. Shots sent to solver."
         status_msg_dict["status"] = "DONE"
-        status_binary = json.dumps(status_msg_dict).encode("utf-8")
-        upload(DUMPSTRING=status_binary, DROPBOXPATH=status_json_path)
+        # status_binary = json.dumps(status_msg_dict).encode("utf-8")
+        # upload(DUMPSTRING=status_binary, DROPBOXPATH=status_json_path)
 
-        finished_json_dir = (
-            "/Backend_files/Finished_Jobs/"
-            + requested_backend
-            + "/"
-            + extracted_username
-            + "/"
-        )
-        job_json_final_path = finished_json_dir + job_json_name
-        move_file(STARTPATH=job_json_start_path, FINALPATH=job_json_final_path)
+        # finished_json_dir = (
+        #     "/Backend_files/Finished_Jobs/"
+        #     + requested_backend
+        #     + "/"
+        #     + extracted_username
+        #     + "/"
+        # )
+        # job_json_final_path = finished_json_dir + job_json_name
+        # move_file(STARTPATH=job_json_start_path, FINALPATH=job_json_final_path)
     else:
         status_msg_dict["detail"] += (
             "; Failed json sanity check. File will be deleted. Error message : "
@@ -386,9 +386,10 @@ def add_job(json_dict, status_msg_dict):
             + err_msg
         )
         status_msg_dict["status"] = "ERROR"
-        status_binary = json.dumps(status_msg_dict).encode("utf-8")
-        upload(DUMPSTRING=status_binary, DROPBOXPATH=status_json_path)
+        # status_binary = json.dumps(status_msg_dict).encode("utf-8")
+        # upload(DUMPSTRING=status_binary, DROPBOXPATH=status_json_path)
 
-        deleted_json_dir = "/Backend_files/Deleted_Jobs/"
-        job_json_final_path = deleted_json_dir + job_json_name
-        move_file(STARTPATH=job_json_start_path, FINALPATH=job_json_final_path)
+        # deleted_json_dir = "/Backend_files/Deleted_Jobs/"
+        # job_json_final_path = deleted_json_dir + job_json_name
+        # move_file(STARTPATH=job_json_start_path, FINALPATH=job_json_final_path)
+    return result_dict, status_msg_dict
