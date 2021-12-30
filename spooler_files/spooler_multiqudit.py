@@ -1,8 +1,7 @@
 """
-The module that contains all the necessary logic for the fermions.
+The module that contains all the necessary logic for the multiqudit.
 """
 
-import json
 from typing import List
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
@@ -175,12 +174,12 @@ barrier_schema = {
 
 def check_with_schema(obj: dict, schm: dict):
     """
-    A wrapper around the validate function of jsonschema
+    Caller for the validate function of jsonschema
     Args:
         obj (dict): the object that should be checked.
         schm (dict): the schema that defines the object properties.
     Returns:
-        boolean if things work out.
+        boolean flag tellings if dictionary matches schema syntax.
     """
     try:
         validate(instance=obj, schema=schm)
@@ -282,8 +281,8 @@ def op_at_wire(op: csc_matrix, pos: int, dim_per_wire: List[int]) -> csc_matrix:
 
 def create_memory_data(shots_array, exp_name, n_shots):
     """
-    Some obscure function that no one will ever understand. You are now trapped
-    in Rohits wonderland. Good luck finding your way out.
+    The function to create memeory key in results dictionary
+    with proprer formatting.
     """
     exp_sub_dict = {
         "header": {"name": "experiment_0", "extra metadata": "text"},
