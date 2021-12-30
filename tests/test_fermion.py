@@ -1,13 +1,26 @@
-import pytest
+"""
+Test module for the spooler_fermion.py file.
+"""
 
-import sys, os
+import sys
+import os
+import numpy as np
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "spooler_files"))
-
-from spooler_fermions import *
+from spooler_fermions import check_json_dict, gen_circuit  # *
 
 
 def run_json_circuit(json_dict, job_id):
+    """
+    A support function that executes the job.
+
+    Args:
+        json_dict: the job dict that will be treated
+        job_id: the number of the job
+
+    Returns:
+        the results dict
+    """
     result_dict = {
         "backend_name": "synqs_fermionic_tweezer_simulator",
         "backend_version": "0.0.1",
@@ -19,7 +32,7 @@ def run_json_circuit(json_dict, job_id):
         "results": [],
     }
     err_msg, json_is_fine = check_json_dict(json_dict)
-    assert json_is_fine == True, "Failed JSON sanity check : " + err_msg
+    assert json_is_fine is True, "Failed JSON sanity check : " + err_msg
     if json_is_fine:
         for exp in json_dict:
             exp_dict = {exp: json_dict[exp]}
@@ -59,7 +72,7 @@ def test_wire_order():
 
     job_id = 1
     try:
-        data = run_json_circuit(job_payload, job_id)
+        dummy = run_json_circuit(job_payload, job_id)
     except AssertionError as ass_err:
         print("Sucessfully triggered AssertionError", str(ass_err))
 
