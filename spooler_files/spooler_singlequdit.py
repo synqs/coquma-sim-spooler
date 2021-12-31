@@ -137,6 +137,8 @@ def check_with_schema(obj, schm):
     """
     Caller for the validate function.
     """
+    # Fix this pylint issue whenever you have time, but be careful !
+    # pylint: disable=W0703
     try:
         validate(instance=obj, schema=schm)
         return "", True
@@ -159,6 +161,8 @@ def check_json_dict(json_dict):
     max_exps = 15
     for expr in json_dict:
         err_code = "Wrong experiment name or too many experiments"
+        # Fix this pylint issue whenever you have time, but be careful !
+        # pylint: disable=W0702
         try:
             exp_ok = (
                 expr.startswith("experiment_")
@@ -175,6 +179,8 @@ def check_json_dict(json_dict):
             break
         ins_list = json_dict[expr]["instructions"]
         for ins in ins_list:
+            # Fix this pylint issue whenever you have time, but be careful !
+            # pylint: disable=W0703
             try:
                 err_code, exp_ok = check_with_schema(ins, ins_schema_dict[ins[0]])
             except Exception as err:

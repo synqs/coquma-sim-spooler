@@ -24,6 +24,8 @@ def new_files_exist():
     new_files = True
     pulled_files = [os.path.join(pulled_dir, fn) for fn in next(os.walk(pulled_dir))[2]]
     dst_files = [os.path.join(dst_dir, fn) for fn in next(os.walk(pulled_dir))[2]]
+    # Fix this pylint issue whenever you have time, but be careful !
+    # pylint: disable=C0200
     for i in range(len(pulled_files)):
         src_path = pulled_files[i]
         dst_path = dst_files[i]
@@ -131,11 +133,15 @@ def main():
         )  # __import__('spooler_' + requested_backend)
         add_job = getattr(requested_spooler, "add_job")
         result_dict = {}
+        # Fix this pylint issue whenever you have time, but be careful !
+        # pylint: disable=W0703
         try:
             result_dict, status_msg_dict = add_job(job_json_dict, status_msg_dict)
         except Exception:
             # Remove sensitive info like filepaths
             tb_list = traceback.format_exc().splitlines()
+            # Fix this pylint issue whenever you have time, but be careful !
+            # pylint: disable=C0200
             for i in range(len(tb_list)):
                 tb_list[i] = re.sub(
                     r'File ".*[\\/]([^\\/]+.py)"', r'File "\1"', tb_list[i]
