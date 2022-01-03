@@ -38,7 +38,7 @@ def run_json_circuit(json_dict, job_id):
         for exp in json_dict:
             exp_dict = {exp: json_dict[exp]}
             # Here we
-            result_dict["results"].append(gen_circuit(exp_dict, job_id))
+            result_dict["results"].append(gen_circuit(exp_dict))
 
     return result_dict
 
