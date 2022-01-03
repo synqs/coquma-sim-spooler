@@ -1,6 +1,7 @@
 """
 The module that contains all the necessary logic for the fermions.
 """
+from typing import List
 from jsonschema import validate
 import numpy as np
 from scipy.sparse.linalg import expm
@@ -11,6 +12,58 @@ from scipy.sparse.linalg import expm
 # from scipy.sparse import csc_matrix
 
 NUM_WIRES = 8
+
+
+def generate_gate_schema(
+    gate_name: str,
+    min_wire_num: int,
+    max_wire_num: int,
+    has_param: bool = False,
+    min_par_val: float = 0.0,
+    max_par_val: float = 6.2831853,
+):
+    """
+    Generates schemas for gates.
+
+    Args:
+        gate_name (str): The name of the gate.
+        min_wire_num (int): Minimum number of wires on which the operation can be applied.
+        max_wire_num (int): Maximum number of wires on which the operation can be applied.
+        has_param (bool): Boolean flag which indicates if the gate accepts a parameter.
+        min_par_val (float): Minimum value of gate angle or parameter.
+        max_par_val (float): Maximum value of gate angle or parameter.
+
+    Returns:
+        A dictionary descibing the schema for the gate.
+    """
+    # First define schema for those gates, which do not need a parameter.
+    gate_schema = {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "items": [
+            {"type": "string", "enum": [gate_name]},
+            {
+                "type": "array",
+                "minItems": min_wire_num,
+                "maxItems": max_wire_num,
+                "items": [{"type": "number", "minimum": 0, "maximum": NUM_WIRES - 1}],
+            },
+            {"type": "array", "maxItems": 0},
+        ],
+    }
+    # Now modify schema for those gates, which need a parameter.
+    if has_param:
+        gate_schema["items"][2] = {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": [
+                {"type": "number", "minimum": min_par_val, "maximum": max_par_val}
+            ],
+        }
+    return gate_schema
+
 
 exper_schema = {
     "type": "object",
@@ -25,71 +78,54 @@ exper_schema = {
     "additionalProperties": False,
 }
 
-barrier_schema = {
-    "type": "array",
-    "minItems": 3,
-    "maxItems": 3,
-    "items": [
-        {"type": "string", "enum": ["barrier"]},
-        {
-            "type": "array",
-            "maxItems": NUM_WIRES,
-            "items": [{"type": "number", "minimum": 0, "maximum": NUM_WIRES - 1}],
-        },
-        {"type": "array", "maxItems": 0},
-    ],
-}
-
-load_measure_schema = {
-    "type": "array",
-    "minItems": 3,
-    "maxItems": 3,
-    "items": [
-        {"type": "string", "enum": ["load", "measure"]},
-        {
-            "type": "array",
-            "maxItems": 2,
-            "items": [{"type": "number", "minimum": 0, "maximum": NUM_WIRES - 1}],
-        },
-        {"type": "array", "maxItems": 0},
-    ],
-}
-
-hop_schema = {
-    "type": "array",
-    "minItems": 3,
-    "maxItems": 3,
-    "items": [
-        {"type": "string", "enum": ["fhop"]},
-        {
-            "type": "array",
-            "maxItems": 4,
-            "items": [{"type": "number", "minimum": 0, "maximum": 7}],
-        },
-        {
-            "type": "array",
-            "items": [{"type": "number", "minimum": 0, "maximum": 6.284}],
-        },
-    ],
-}
-
-int_schema = {
-    "type": "array",
-    "minItems": 3,
-    "maxItems": 3,
-    "items": [
-        {"type": "string", "enum": ["fint", "fphase"]},
-        {
-            "type": "array",
-            "maxItems": 8,
-            "items": [{"type": "number", "minimum": 0, "maximum": 7}],
-        },
-        {
-            "type": "array",
-            "items": [{"type": "number", "minimum": 0, "maximum": 6.284}],
-        },
-    ],
-}
+barrier_schema = generate_gate_schema(
+    gate_name="barrier",
+    min_wire_num=0,
+    max_wire_num=NUM_WIRES,
+    has_param=False,
+    min_par_val=None,
+    max_par_val=None,
+)
+load_schema = generate_gate_schema(
+    gate_name="load",
+    min_wire_num=0,
+    max_wire_num=2,
+    has_param=False,
+    min_par_val=None,
+    max_par_val=None,
+)
+measure_schema = generate_gate_schema(
+    gate_name="measure",
+    min_wire_num=0,
+    max_wire_num=2,
+    has_param=False,
+    min_par_val=None,
+    max_par_val=None,
+)
+hop_schema = generate_gate_schema(
+    gate_name="fhop",
+    min_wire_num=0,
+    max_wire_num=4,
+    has_param=True,
+    min_par_val=0,
+    max_par_val=6.2831853,
+)
+int_schema = generate_gate_schema(
+    gate_name="fint",
+    min_wire_num=0,
+    max_wire_num=NUM_WIRES,
+    has_param=True,
+    min_par_val=0,
+    max_par_val=6.2831853,
+)
+phase_schema = generate_gate_schema(
+    gate_name="fphase",
+    min_wire_num=0,
+    max_wire_num=NUM_WIRES,
+    has_param=True,
+    min_par_val=0,
+    max_par_val=6.2831853,
+)
 
 
 def check_with_schema(obj, schm):
@@ -116,12 +152,12 @@ def check_json_dict(json_dict):
         bool: is the expression having the appropiate syntax ?
     """
     ins_schema_dict = {
-        "load": load_measure_schema,
+        "load": load_schema,
         "barrier": barrier_schema,
         "fhop": hop_schema,
         "fint": int_schema,
-        "fphase": int_schema,
-        "measure": load_measure_schema,
+        "fphase": phase_schema,
+        "measure": measure_schema,
     }
     max_exps = 50
     for expr in json_dict:

@@ -10,6 +10,58 @@ from scipy.sparse.linalg import expm_multiply
 from scipy.sparse import diags
 from scipy.sparse import csc_matrix
 
+
+def generate_gate_schema(
+    gate_name: str,
+    min_wire_num: int,
+    max_wire_num: int,
+    has_param: bool = False,
+    min_par_val: float = 0.0,
+    max_par_val: float = 6.2831853,
+):
+    """
+    Generates schemas for gates.
+
+    Args:
+        gate_name (str): The name of the gate.
+        min_wire_num (int): Minimum number of wires on which the operation can be applied.
+        max_wire_num (int): Maximum number of wires on which the operation can be applied.
+        has_param (bool): Boolean flag which indicates if the gate accepts a parameter.
+        min_par_val (float): Minimum value of gate angle or parameter.
+        max_par_val (float): Maximum value of gate angle or parameter.
+
+    Returns:
+        A dictionary descibing the schema for the gate.
+    """
+    # First define schema for those gates, which do not need a parameter.
+    gate_schema = {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "items": [
+            {"type": "string", "enum": [gate_name]},
+            {
+                "type": "array",
+                "minItems": min_wire_num,
+                "maxItems": max_wire_num,
+                "items": [{"type": "number", "minimum": 0, "maximum": 1}],
+            },
+            {"type": "array", "maxItems": 0},
+        ],
+    }
+    # Now modify schema for those gates, which need a parameter.
+    if has_param:
+        gate_schema["items"][2] = {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": [
+                {"type": "number", "minimum": min_par_val, "maximum": max_par_val}
+            ],
+        }
+    return gate_schema
+
+
 exper_schema = {
     "type": "object",
     "required": ["instructions", "shots", "num_wires"],
@@ -23,114 +75,54 @@ exper_schema = {
     "additionalProperties": False,
 }
 
-rLx_schema = {
-    "type": "array",
-    "minItems": 3,
-    "maxItems": 3,
-    "items": [
-        {"type": "string", "enum": ["rlx"]},
-        {
-            "type": "array",
-            "maxItems": 2,
-            "items": [{"type": "number", "minimum": 0, "maximum": 1}],
-        },
-        {
-            "type": "array",
-            "items": [{"type": "number", "minimum": 0, "maximum": 6.284}],
-        },
-    ],
-}
-
-rLz_schema = {
-    "type": "array",
-    "minItems": 3,
-    "maxItems": 3,
-    "items": [
-        {"type": "string", "enum": ["rlz"]},
-        {
-            "type": "array",
-            "maxItems": 2,
-            "items": [{"type": "number", "minimum": 0, "maximum": 1}],
-        },
-        {
-            "type": "array",
-            "items": [{"type": "number", "minimum": 0, "maximum": 6.284}],
-        },
-    ],
-}
-
-rLz2_schema = {
-    "type": "array",
-    "minItems": 3,
-    "maxItems": 3,
-    "items": [
-        {"type": "string", "enum": ["rlz2"]},
-        {
-            "type": "array",
-            "maxItems": 2,
-            "items": [{"type": "number", "minimum": 0, "maximum": 1}],
-        },
-        {
-            "type": "array",
-            "items": [{"type": "number", "minimum": 0, "maximum": 10 * 6.284}],
-        },
-    ],
-}
-
-load_schema = {
-    "type": "array",
-    "minItems": 3,
-    "maxItems": 3,
-    "items": [
-        {"type": "string", "enum": ["load"]},
-        {
-            "type": "array",
-            "maxItems": 2,
-            "items": [{"type": "number", "minimum": 0, "maximum": 0}],
-        },
-        {
-            "type": "array",
-            # set the upper limit for the number of atoms that can be loaded
-            # into the single qudit
-            "items": [{"type": "number", "minimum": 0, "maximum": 500}],
-        },
-    ],
-}
-
-load_schema = {
-    "type": "array",
-    "minItems": 3,
-    "maxItems": 3,
-    "items": [
-        {"type": "string", "enum": ["load"]},
-        {
-            "type": "array",
-            "maxItems": 2,
-            "items": [{"type": "number", "minimum": 0, "maximum": 0}],
-        },
-        {
-            "type": "array",
-            # set the upper limit for the number of atoms that can be loaded
-            # into the single qudit
-            "items": [{"type": "number", "minimum": 0, "maximum": 500}],
-        },
-    ],
-}
-
-barrier_measure_schema = {
-    "type": "array",
-    "minItems": 3,
-    "maxItems": 3,
-    "items": [
-        {"type": "string", "enum": ["measure", "barrier"]},
-        {
-            "type": "array",
-            "maxItems": 2,
-            "items": [{"type": "number", "minimum": 0, "maximum": 1}],
-        },
-        {"type": "array", "maxItems": 0},
-    ],
-}
+barrier_schema = generate_gate_schema(
+    gate_name="barrier",
+    min_wire_num=0,
+    max_wire_num=2,
+    has_param=False,
+    min_par_val=None,
+    max_par_val=None,
+)
+load_schema = generate_gate_schema(
+    gate_name="load",
+    min_wire_num=0,
+    max_wire_num=2,
+    has_param=True,
+    min_par_val=0,
+    max_par_val=500,
+)
+measure_schema = generate_gate_schema(
+    gate_name="measure",
+    min_wire_num=0,
+    max_wire_num=2,
+    has_param=False,
+    min_par_val=None,
+    max_par_val=None,
+)
+rlx_schema = generate_gate_schema(
+    gate_name="rlx",
+    min_wire_num=0,
+    max_wire_num=2,
+    has_param=True,
+    min_par_val=0,
+    max_par_val=6.2831853,
+)
+rlz_schema = generate_gate_schema(
+    gate_name="rlz",
+    min_wire_num=0,
+    max_wire_num=2,
+    has_param=True,
+    min_par_val=0,
+    max_par_val=6.2831853,
+)
+rlz2_schema = generate_gate_schema(
+    gate_name="rlz2",
+    min_wire_num=0,
+    max_wire_num=2,
+    has_param=True,
+    min_par_val=0,
+    max_par_val=10 * 6.2831853,
+)
 
 
 def check_with_schema(obj, schm):
@@ -154,8 +146,8 @@ def check_json_dict(json_dict):
         "rlx": rLx_schema,
         "rlz": rLz_schema,
         "rlz2": rLz2_schema,
-        "barrier": barrier_measure_schema,
-        "measure": barrier_measure_schema,
+        "barrier": barrier_schema,
+        "measure": measure_schema,
         "load": load_schema,
     }
     max_exps = 15
