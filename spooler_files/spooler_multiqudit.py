@@ -246,7 +246,7 @@ def check_json_dict(json_dict):
         dim_hilbert = dim_hilbert * (2 ** qubit_wires)
         dim_ok = dim_hilbert < (2 ** 12) + 1
         if not dim_ok:
-            err_code = "Hilbert space dimension to large"
+            err_code = "Hilbert space dimension too large!"
             break
     return err_code.replace("\n", ".."), exp_ok and dim_ok
 

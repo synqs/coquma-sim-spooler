@@ -71,7 +71,7 @@ def update_in_database(result_dict, status_msg_dict, job_id):
         )
         job_json_final_path = finished_json_dir + job_json_name
         move_file(start_path=job_json_start_path, final_path=job_json_final_path)
-    else:
+    elif status_msg_dict["status"] == "ERROR":
         deleted_json_dir = "/Backend_files/Deleted_Jobs/"
         job_json_final_path = deleted_json_dir + job_json_name
         move_file(start_path=job_json_start_path, final_path=job_json_final_path)
