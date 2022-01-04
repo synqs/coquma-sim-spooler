@@ -24,11 +24,7 @@ def new_files_exist():
     new_files = True
     pulled_files = [os.path.join(pulled_dir, fn) for fn in next(os.walk(pulled_dir))[2]]
     dst_files = [os.path.join(dst_dir, fn) for fn in next(os.walk(pulled_dir))[2]]
-    # Fix this pylint issue whenever you have time, but be careful !
-    # pylint: disable=C0200
-    for i in range(len(pulled_files)):
-        src_path = pulled_files[i]
-        dst_path = dst_files[i]
+    for src_path, dst_path in zip(pulled_files, dst_files):
         shutil.copy(src_path, dst_path)
     shutil.rmtree(pulled_dir)
     return new_files
@@ -128,9 +124,7 @@ def main():
 
         job_json_dict = json.loads(get_file_content(dbx_path=job_json_path))
 
-        requested_spooler = importlib.import_module(
-            "spooler_" + requested_backend
-        )  # __import__('spooler_' + requested_backend)
+        requested_spooler = importlib.import_module("spooler_" + requested_backend)
         add_job = getattr(requested_spooler, "add_job")
         result_dict = {}
         # Fix this pylint issue whenever you have time, but be careful !
@@ -140,12 +134,12 @@ def main():
         except Exception:
             # Remove sensitive info like filepaths
             tb_list = traceback.format_exc().splitlines()
-            # Fix this pylint issue whenever you have time, but be careful !
-            # pylint: disable=C0200
-            for i in range(len(tb_list)):
+            for i, dummy in enumerate(tb_list):
                 tb_list[i] = re.sub(
                     r'File ".*[\\/]([^\\/]+.py)"', r'File "\1"', tb_list[i]
-                )
+                )  # Regex for repalcing absolute filepath with only filename.
+                # Basically search for slashes and replace with the first group or
+                # bracketed expression which is obviously the filename.
             slimmed_tb = " ".join(tb_list)
             # Update status dict
             status_msg_dict["status"] = "ERROR"

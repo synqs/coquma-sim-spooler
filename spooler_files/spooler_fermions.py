@@ -5,11 +5,6 @@ from jsonschema import validate
 import numpy as np
 from scipy.sparse.linalg import expm
 
-# from scipy.sparse import identity
-# from scipy.sparse import diags
-# from scipy.sparse import coo_matrix
-# from scipy.sparse import csc_matrix
-
 NUM_WIRES = 8
 
 exper_schema = {
@@ -175,14 +170,14 @@ def nested_kronecker_product(a):
         return np.kron(a[0], nested_kronecker_product(a[1:]))
 
 
-def jordan_wigner_transform(j, lattice_length):
+def jordan_wigner_transform(j: int, lattice_length: int) -> np.array:
     """
     Builds up the fermionic operators in a 1D lattice.
     For details see : https://arxiv.org/abs/0705.1928
 
     Args:
-        j (int): site index
-        lattice_length (int):  how many sites does the lattice have ?
+        j : site index
+        lattice_length :  how many sites does the lattice have ?
 
     Returns:
         psi_x: the field operator of creating a fermion on size j

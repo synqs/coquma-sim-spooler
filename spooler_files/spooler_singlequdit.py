@@ -3,8 +3,6 @@ The module that contains all the necessary logic for the singlequdit.
 """
 
 from jsonschema import validate
-
-# from jsonschema.exceptions import ValidationError
 import numpy as np
 from scipy.sparse.linalg import expm_multiply
 from scipy.sparse import diags
