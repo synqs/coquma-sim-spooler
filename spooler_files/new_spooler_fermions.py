@@ -311,7 +311,6 @@ def gen_circuit(json_dict):
             # the other two indices are the end points
             theta = inst[2][0]
             Uint = expm(-1j * theta * U_arr)
-            # theta = inst[2][0]
             psi = np.dot(Uint, psi)
         if inst[0] == "fphase":
             # the first two indices are the starting points
@@ -336,7 +335,6 @@ def gen_circuit(json_dict):
             measurements[j] = req_sect_sub_space[resultInd[j]][measurement_indices]
         shots_array = measurements.tolist()
 
-    #print("done calc")
     exp_sub_dict = create_memory_data(shots_array, exp_name, n_shots)
     return exp_sub_dict
 
