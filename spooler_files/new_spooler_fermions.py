@@ -239,7 +239,7 @@ def gen_circuit(json_dict):
         diff_indices = np.where(test!=0.)[0]
         if diff_indices.size!=2:
             return hop_allowed
-        if np.abs(diff_indices[1]-diff_indices[0])!=2:
+        if diff_indices[1]-diff_indices[0] != 2:
             return hop_allowed
         if link!=None:
             tweezers_inds = diff_indices//2
