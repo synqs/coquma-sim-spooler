@@ -38,27 +38,28 @@ def generate_gate_schema(
     """
     # First define schema for those gates, which do not need a parameter.
     gate_schema = {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
         "type": "array",
         "minItems": 3,
         "maxItems": 3,
-        "items": [
+        "prefixItems": [
             {"type": "string", "enum": [gate_name]},
             {
                 "type": "array",
                 "minItems": min_wire_num,
                 "maxItems": max_wire_num,
-                "items": [{"type": "number", "minimum": 0, "maximum": NUM_WIRES - 1}],
+                "prefixItems": [{"type": "number", "minimum": 0, "maximum": NUM_WIRES - 1}],
             },
             {"type": "array", "maxItems": 0},
         ],
     }
     # Now modify schema for those gates, which need a parameter.
     if has_param:
-        gate_schema["items"][2] = {
+        gate_schema["prefixItems"][2] = {
             "type": "array",
             "minItems": 1,
             "maxItems": 1,
-            "items": [
+            "prefixItems": [
                 {"type": "number", "minimum": min_par_val, "maximum": max_par_val}
             ],
         }
@@ -66,6 +67,7 @@ def generate_gate_schema(
 
 
 exper_schema = {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "required": ["instructions", "shots", "num_wires", "wire_order"],
     "properties": {
