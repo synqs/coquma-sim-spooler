@@ -82,7 +82,7 @@ exper_schema = {
 
 barrier_schema = generate_gate_schema(
     gate_name="barrier",
-    min_wire_num=0,
+    min_wire_num=1,
     max_wire_num=NUM_WIRES,
     has_param=False,
     min_par_val=None,
@@ -90,23 +90,23 @@ barrier_schema = generate_gate_schema(
 )
 load_schema = generate_gate_schema(
     gate_name="load",
-    min_wire_num=0,
-    max_wire_num=2,
+    min_wire_num=1,
+    max_wire_num=1,
     has_param=False,
     min_par_val=None,
     max_par_val=None,
 )
 measure_schema = generate_gate_schema(
     gate_name="measure",
-    min_wire_num=0,
-    max_wire_num=2,
+    min_wire_num=1,
+    max_wire_num=1,
     has_param=False,
     min_par_val=None,
     max_par_val=None,
 )
 hop_schema = generate_gate_schema(
     gate_name="fhop",
-    min_wire_num=0,
+    min_wire_num=4,
     max_wire_num=4,
     has_param=True,
     min_par_val=0,
@@ -114,7 +114,7 @@ hop_schema = generate_gate_schema(
 )
 int_schema = generate_gate_schema(
     gate_name="fint",
-    min_wire_num=0,
+    min_wire_num=NUM_WIRES,
     max_wire_num=NUM_WIRES,
     has_param=True,
     min_par_val=0,
@@ -122,7 +122,7 @@ int_schema = generate_gate_schema(
 )
 phase_schema = generate_gate_schema(
     gate_name="fphase",
-    min_wire_num=0,
+    min_wire_num=1,
     max_wire_num=NUM_WIRES,
     has_param=True,
     min_par_val=0,

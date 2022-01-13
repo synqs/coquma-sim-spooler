@@ -86,7 +86,7 @@ exper_schema = {
 
 barrier_schema = generate_gate_schema(
     gate_name="barrier",
-    min_wire_num=0,
+    min_wire_num=1,
     max_wire_num=MAX_NUM_WIRES,
     has_param=False,
     min_par_val=None,
@@ -94,15 +94,15 @@ barrier_schema = generate_gate_schema(
 )
 load_schema = generate_gate_schema(
     gate_name="load",
-    min_wire_num=0,
-    max_wire_num=MAX_NUM_WIRES,
+    min_wire_num=1,
+    max_wire_num=1,
     has_param=True,
     min_par_val=0,
     max_par_val=500,
 )
 measure_schema = generate_gate_schema(
     gate_name="measure",
-    min_wire_num=0,
+    min_wire_num=1,
     max_wire_num=1,
     has_param=False,
     min_par_val=None,
@@ -110,7 +110,7 @@ measure_schema = generate_gate_schema(
 )
 rlx_schema = generate_gate_schema(
     gate_name="rlx",
-    min_wire_num=0,
+    min_wire_num=1,
     max_wire_num=1,
     has_param=True,
     min_par_val=0,
@@ -118,7 +118,7 @@ rlx_schema = generate_gate_schema(
 )
 rlz_schema = generate_gate_schema(
     gate_name="rlz",
-    min_wire_num=0,
+    min_wire_num=1,
     max_wire_num=1,
     has_param=True,
     min_par_val=0,
@@ -126,7 +126,7 @@ rlz_schema = generate_gate_schema(
 )
 rlz2_schema = generate_gate_schema(
     gate_name="rlz2",
-    min_wire_num=0,
+    min_wire_num=1,
     max_wire_num=1,
     has_param=True,
     min_par_val=0,
@@ -135,7 +135,7 @@ rlz2_schema = generate_gate_schema(
 
 lxly_schema = generate_gate_schema(
     gate_name="rlxly",
-    min_wire_num=0,
+    min_wire_num=2,
     max_wire_num=MAX_NUM_WIRES,
     has_param=True,
     min_par_val=0,
@@ -144,8 +144,8 @@ lxly_schema = generate_gate_schema(
 
 lzlz_schema = generate_gate_schema(
     gate_name="rlzlz",
-    min_wire_num=0,
-    max_wire_num=MAX_NUM_WIRES,
+    min_wire_num=2,
+    max_wire_num=2,
     has_param=True,
     min_par_val=0,
     max_par_val=10 * 6.2831853,
